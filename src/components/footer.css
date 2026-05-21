@@ -1,0 +1,22 @@
+.foot-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(248, 247, 246);
+  width: 100%;
+}
+
+.link-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 5em;
+  width: 10em;
+}
+
+.message-container {
+  margin-left: 5em;
+}
+
+#link-social {
+  margin-right: 2em;
+}
