@@ -1,0 +1,29 @@
+.body-home {
+  margin-top: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#b-products {
+  background-color: transparent;
+  border-color: transparent;
+  cursor: pointer;
+  margin-top: 1.5em;
+  color: #5862d6;
+  font-weight: bold;
+}
+
+#b-products:active {
+  color: red;
+}
+#info-text {
+  font-size: 0.7em;
+  margin-top: 5em;
+}
+
+.home-text {
+  color: gray;
+}
