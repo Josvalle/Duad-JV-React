@@ -2,16 +2,37 @@ import './styles/edits.css'
 import { useProduct } from '../contexts/ProductsContext'
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import sadFace from '../assets/sad-face.png';
+
+const objectValidation = Yup.object({
+    nombre: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
+    descripcion: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
+    precio: Yup.number().required('Por favor completa todos los campos antes de agregar el producto. '),
+    categoria: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
+    imagen: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
+    stock: Yup.number().required('Por favor completa todos los campos antes de agregar el producto. ')
+})
 
 function Edits({setPage}){
     const {products,productSelected,setProducts} = useProduct()
     const product = products.find(item => item.id === productSelected);
+
+    if (!product){
+        return(
+            <div className="no-products">
+                <img id="no-product-image" src={sadFace} alt="" />
+                <h2>No hay productos disponibles por el momento.</h2>
+                <p>El producto que buscar ha sido eliminado o se acabo</p>
+            </div>)
+        }
+
 
     return(
         <div id='form-container'>
             <h1>Editar producto</h1>
             <Formik
             initialValues={{nombre:product.nombre, descripcion:product.descripcion, precio: product.precio, categoria:product.categoria,imagen:product.imagen, stock:product.stock}}
+            validationSchema={objectValidation}
             onSubmit={(values)=>{
                 setProducts((editProducts) => editProducts.map(
                     (item) => item.id === productSelected ? {...item, ...values} : item));

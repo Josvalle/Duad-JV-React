@@ -1,10 +1,20 @@
 import './details.css';
 import { useProduct } from '../contexts/ProductsContext';
+import sadFace from '../assets/sad-face.png';
 
 function Details({ setPage }) {
   const {products,productSelected} = useProduct()
   const product = products.find(item => item.id === productSelected);
 
+  if (!product){
+    return(
+      <>
+      <img src={sadFace} alt="" />
+      <h1> Producto no encontrado</h1>
+      <p>El producto que buscar ha sido eliminado o se acabo</p>
+      </>
+    )
+  }
   return (
     <div className="div-global">
       <img className="image-details" src={product.imagen} alt="imagen" />
