@@ -1,6 +1,10 @@
 import './details.css';
+import { useProduct } from '../contexts/ProductsContext';
 
-function Details({ setPage, product }) {
+function Details({ setPage }) {
+  const {products,productSelected} = useProduct()
+  const product = products.find(item => item.id === productSelected);
+
   return (
     <div className="div-global">
       <img className="image-details" src={product.imagen} alt="imagen" />

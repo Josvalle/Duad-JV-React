@@ -5,22 +5,31 @@ import EndFot from './components/Footer';
 import Home from './components/Home';
 import Products from './components/Products';
 import Details from './components/Details';
+import Manager from './components/Manager'
+import Edits from './components/Edits';
+import { ProvideProduct } from './contexts/ProductsContext';
 
 function App() {
   const [page, setPage] = useState('home');
-  const [product, setProduct] = useState(null);
+  
 
   return (
     <div className="app">
       <Header setPage={setPage} />
-
-      <main className="main-content">
+      <ProvideProduct>
+        <main className="main-content">
         {page === 'home' && <Home setPage={setPage} />}
         {page === 'products' && (
-          <Products setPage={setPage} setproductSelected={setProduct} />
+          <Products setPage={setPage}  />
         )}
-        {page === 'details' && <Details setPage={setPage} product={product} />}
+        {page === 'details' && <Details setPage={setPage}  />}
+        {page === 'manager' && <Manager setPage={setPage} />}
+        {page === 'edits' && <Edits setPage={setPage} />}
+
       </main>
+
+      </ProvideProduct>
+      
 
       <EndFot />
     </div>

@@ -13,6 +13,7 @@ function Header({ setPage }) {
         <button onClick={() => setPage('home')}>Inicio</button>
         <button onClick={() => setPage('products')}>Productos</button>
         <button onClick={() => setPage('contact')}>Contacto</button>
+        <button onClick={()=> setPage('manager')}>Administracion</button>
       </div>
     </nav>
   );
