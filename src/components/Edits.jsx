@@ -5,12 +5,12 @@ import * as Yup from 'yup';
 import sadFace from '../assets/sad-face.png';
 
 const objectValidation = Yup.object({
-    nombre: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
-    descripcion: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
-    precio: Yup.number().required('Por favor completa todos los campos antes de agregar el producto. '),
-    categoria: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
-    imagen: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
-    stock: Yup.number().required('Por favor completa todos los campos antes de agregar el producto. ')
+    nombre: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
+    descripcion: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
+    precio: Yup.number().required('Por favor completa todos los campos antes de completar la ediccion. '),
+    categoria: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
+    imagen: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
+    stock: Yup.number().required('Por favor completa todos los campos antes de completar la ediccion. ')
 })
 
 function Edits({setPage}){
