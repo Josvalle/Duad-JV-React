@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import productData from '../data/products.json';
+import { useProduct } from '../contexts/ProductsContext';
 import sadFace from '../assets/sad-face.png';
 import './products.css';
 
-function ProductList({ setPage, setproductSelected }) {
-  const [products, setProducts] = useState([]);
+function ProductList({ setPage }) {
+  const {products, setProducts, setProductSelected} = useProduct()
+  
   const [pageLoading, setPageLoading] = useState(true);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setProducts(productData);
       setPageLoading(false);
     }, 1500);
 
@@ -50,7 +51,7 @@ function ProductList({ setPage, setproductSelected }) {
               <p className="category">{product.categoria}</p>
               <button
                 onClick={() => {
-                  setproductSelected(product);
+                  setProductSelected(product.id);
                   setPage('details');
                 }}
                 className="card-button"

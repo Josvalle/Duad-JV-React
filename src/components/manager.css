@@ -1,0 +1,105 @@
+#administration-container{
+    border: 2px;
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 8px;
+    margin: 2em;
+    padding: 1em;
+}
+
+#form-container{
+    border: 2px;
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 8px;
+    margin: 2em;
+    padding: 1em;
+}
+#table-container{
+    margin-top: 1.50em;
+}
+
+td{
+    text-align: center;
+}
+
+.th-manager{
+    width: 20em;
+}
+
+.edit-button{
+    background-color: transparent;
+    margin-left: 0.50em;
+    border-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.edit-button:active{
+    background-color: yellow;
+}
+
+.delete-button{
+    background-color: transparent;
+    margin-left: 0.50em;
+    border-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+#new-product-form{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.inputs-forms{
+    border-radius: 5px;
+    margin-top: 0.50em;
+    border-style: solid;
+    border-color: lightgray;
+    height: 1.50em;
+}
+
+label{
+    margin-bottom: 0.50em;
+    margin-top: 0.25em;
+}
+#nombre{
+    width: 25em;
+}
+
+#descripcion{
+    max-width: 50em;
+}
+
+#categoria{
+    width: 25em;
+}
+
+#precio{
+    width: 10em;
+}
+
+#stock{
+    width: 10em;
+}
+
+#imagen{
+    width: 35em;
+}
+#submit-form{
+    margin-top: 1.25em;
+    border-radius: 5px;
+    height: 1.95em;
+    border-color: transparent;
+    background-color: #5862d6;
+    cursor: pointer;
+
+}
+
+#submit-form:active{
+    background-color: #1527ec;
+}
