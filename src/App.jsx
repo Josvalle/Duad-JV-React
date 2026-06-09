@@ -7,7 +7,9 @@ import Products from './components/Products';
 import Details from './components/Details';
 import Manager from './components/Manager'
 import Edits from './components/Edits';
+import Login from './components/Login'
 import { ProvideProduct } from './contexts/ProductsContext';
+import { ProvideUsers } from './contexts/UsersContext'
 
 function App() {
   const [page, setPage] = useState('home');
@@ -15,6 +17,7 @@ function App() {
 
   return (
     <div className="app">
+      <ProvideUsers>
       <Header setPage={setPage} />
       <ProvideProduct>
         <main className="main-content">
@@ -25,10 +28,12 @@ function App() {
         {page === 'details' && <Details setPage={setPage}  />}
         {page === 'manager' && <Manager setPage={setPage} />}
         {page === 'edits' && <Edits setPage={setPage} />}
+        {page === 'login' && <Login setPage={setPage}/>}
 
       </main>
 
       </ProvideProduct>
+      </ProvideUsers>
       
 
       <EndFot />

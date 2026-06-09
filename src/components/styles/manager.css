@@ -103,3 +103,39 @@ label{
 #submit-form:active{
     background-color: #1527ec;
 }
+
+.no-admin-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 55em;
+    margin: 6em auto;
+}
+
+#block-image{
+    height: 350px;
+    width: 350px;
+}
+
+.permssion-buttons{
+    margin-bottom: 1.25em;
+    margin-top: 0.25em;
+    border-radius: 5px;
+    height: 2.95em;
+    border-color: transparent;
+    background-color: #5862d6;
+    cursor: pointer;
+    color: antiquewhite;
+    width: 16em;
+    font-size: medium;
+    font-weight: bold;
+}
+
+#no-login-message{
+    text-align: center;
+    margin: 0.25em;
+}

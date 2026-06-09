@@ -1,8 +1,11 @@
 import './styles/edits.css'
 import { useProduct } from '../contexts/ProductsContext'
+import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import useApi from '../hooks/useApi'
 import sadFace from '../assets/sad-face.png';
+import candado from '../assets/candado.png'
 
 const objectValidation = Yup.object({
     nombre: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
@@ -14,30 +17,51 @@ const objectValidation = Yup.object({
 })
 
 function Edits({setPage}){
-    const {products,productSelected,setProducts} = useProduct()
+    const {products,productSelected,setProducts,loadProducts} = useProduct()
+    const {fetchData} = useApi(setProducts)
+    const {userAdmin,userLogin} = useUsers()
+
     const product = products.find(item => item.id === productSelected);
 
-    if (!product){
-        return(
+    if(userAdmin === false){
+            return(
+                <div className='no-admin-container' >
+                    <img id='block-image' src={candado} alt="" />
+                    <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
+                    <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
+                </div>
+            )
+        }else if(userLogin === false){
+            return(
+                <div className='no-admin-container' >
+                    <img id='block-image' src={candado} alt="" />
+                    <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
+                    <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
+                    <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+                </div>
+            )
+        }else if(!product){
+            return(
             <div className="no-products">
                 <img id="no-product-image" src={sadFace} alt="" />
                 <h2>No hay productos disponibles por el momento.</h2>
                 <p>El producto que buscar ha sido eliminado o se acabo</p>
             </div>)
-        }
-
-
-    return(
+        }else{
+            return(
         <div id='form-container'>
             <h1>Editar producto</h1>
             <Formik
             initialValues={{nombre:product.nombre, descripcion:product.descripcion, precio: product.precio, categoria:product.categoria,imagen:product.imagen, stock:product.stock}}
             validationSchema={objectValidation}
-            onSubmit={(values)=>{
-                setProducts((editProducts) => editProducts.map(
-                    (item) => item.id === productSelected ? {...item, ...values} : item));
-
-                    setPage('manager')
+            onSubmit={async (values)=>{
+                    const send_values ={
+                        "id": product.id,
+                        ...values
+                    }
+                    await fetchData('put','http://localhost:5000/products',send_values);
+                    await loadProducts();
+                    setPage('manager');
             }}
             >
             <Form id='edit-product-form'>
@@ -73,6 +97,11 @@ function Edits({setPage}){
             </Formik>
         </div>
     )
+        }
+    
+
+
+    
 }
 
 export default Edits;
