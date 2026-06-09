@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData,Table, insert, select,update, delete, and_,or_ 
 
-engine = create_engine('postgresql://postgres:!23J0$ue@localhost:5432/postgres')
+engine = create_engine('postgresql://postgres:xxxxxx@localhost:5432/postgres')
 metadata_obj = MetaData()
 
 class User:
