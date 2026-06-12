@@ -33,13 +33,13 @@ function Login({setPage}){
                         setUsers(response.data);
                         setUserLogin(true);
                         setUserAdmin(true)
-                        setPage('home');
+                        setPage('manager');
                         resetForm();
                         
                     }else if(response.status === 200){
                         setUsers(response.data);
                         setUserLogin(true);
-                        setPage('home');
+                        setPage('products');
                         resetForm();
                     }else if(response.status === 409){
                         setLoginError('Las credenciales proporcionadas no son válidas. Por favor verifica tu correo y contraseña.')

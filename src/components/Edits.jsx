@@ -3,7 +3,7 @@ import { useProduct } from '../contexts/ProductsContext'
 import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import useApi from '../hooks/useApi'
+import useToken from '../hooks/useToken'
 import sadFace from '../assets/sad-face.png';
 import candado from '../assets/candado.png'
 
@@ -18,26 +18,25 @@ const objectValidation = Yup.object({
 
 function Edits({setPage}){
     const {products,productSelected,setProducts,loadProducts} = useProduct()
-    const {fetchData} = useApi(setProducts)
-    const {userAdmin,userLogin} = useUsers()
-
+    const {fetchDataToken} = useToken(setProducts)
+    const {users,userAdmin,userLogin} = useUsers()
     const product = products.find(item => item.id === productSelected);
 
-    if(userAdmin === false){
-            return(
-                <div className='no-admin-container' >
-                    <img id='block-image' src={candado} alt="" />
-                    <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                    <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
-                </div>
-            )
-        }else if(userLogin === false){
+    if(userLogin === false){
             return(
                 <div className='no-admin-container' >
                     <img id='block-image' src={candado} alt="" />
                     <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
                     <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
                     <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+                </div>
+            )
+        }else if(userAdmin === false){
+            return(
+                <div className='no-admin-container' >
+                    <img id='block-image' src={candado} alt="" />
+                    <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
+                    <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
                 </div>
             )
         }else if(!product){
@@ -59,7 +58,7 @@ function Edits({setPage}){
                         "id": product.id,
                         ...values
                     }
-                    await fetchData('put','http://localhost:5000/products',send_values);
+                    await fetchDataToken('put','http://localhost:5000/products',send_values,users.token);
                     await loadProducts();
                     setPage('manager');
             }}

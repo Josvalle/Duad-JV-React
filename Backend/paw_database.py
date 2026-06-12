@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData,Table, insert, select,update, delete, and_,or_ 
 
-engine = create_engine('postgresql://postgres:xxxxxx@localhost:5432/postgres')
+engine = create_engine('postgresql://postgres:!23J0$ue@localhost:5432/postgres')
 metadata_obj = MetaData()
 
 class User:
@@ -43,6 +43,16 @@ class Products:
             return result
         except:
             return('Something when wrong')
+    
+    def get_product_by_id(self,id):
+        try:
+            detail_product = select(self.products_table).where(self.products_table.c.id == id)
+            with engine.begin() as conn:
+                    query = conn.execute(detail_product).first()
+                    result = dict(query._mapping) 
+            return result
+        except Exception as ex:
+            print(ex)
         
     def update_inventory(self,id,user_inputs):
         try:

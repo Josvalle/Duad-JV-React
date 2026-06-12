@@ -4,7 +4,7 @@ import sadFace from '../assets/sad-face.png';
 import './styles/products.css';
 
 function ProductList({ setPage }) {
-  const {products, setProducts, setProductSelected} = useProduct()
+  const {products,setProductSelected} = useProduct()
   
   const [pageLoading, setPageLoading] = useState(true);
 

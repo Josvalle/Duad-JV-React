@@ -2,7 +2,7 @@ import './styles/manager.css'
 import { useProduct } from '../contexts/ProductsContext';
 import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
-import useApi from '../hooks/useApi'
+import useToken from '../hooks/useToken'
 import candado from '../assets/candado.png'
 import * as Yup from 'yup';
 
@@ -19,24 +19,25 @@ const objectValidation = Yup.object({
 
 function Manager({setPage}){
     const {products, setProducts,setProductSelected, loadProducts} = useProduct()
-    const {fetchData} = useApi(setProducts)
-    const {userAdmin,userLogin} = useUsers()
+    const {fetchDataToken} = useToken(setProducts)
+    const {users,userAdmin,userLogin} = useUsers()
 
-    if(userAdmin === false){
-        return(
-            <div className='no-admin-container' >
-                <img id='block-image' src={candado} alt="" />
-                <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
-            </div>
-        )
-    }else if(userLogin === false){
+
+    if(userLogin === false){
         return(
             <div className='no-admin-container' >
                 <img id='block-image' src={candado} alt="" />
                 <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
                 <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
                 <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+            </div>
+        )
+    }else if(userAdmin === false){
+        return(
+            <div className='no-admin-container' >
+                <img id='block-image' src={candado} alt="" />
+                <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
+                <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
             </div>
         )
     }else{
@@ -70,7 +71,7 @@ function Manager({setPage}){
                                         <div className='buttons-actions'>
                                             <button id={product.id} onClick={()=> {setPage('edits'); setProductSelected(product.id)}} className='edit-button'>✎ Editar</button>
                                             <button onClick={ async()=>{
-                                                await fetchData('delete','http://localhost:5000/products',{"id":product.id});
+                                                await fetchDataToken('delete','http://localhost:5000/products',{"id":product.id},users.token);
                                                 await loadProducts();
                                             }} className='delete-button'> 🗑 Borrar</button>
                                         </div>
@@ -90,7 +91,7 @@ function Manager({setPage}){
                 validateOnChange={false}
                 validateOnBlur={false}
                 onSubmit={async (values, {resetForm})=> {
-                    await fetchData('post','http://localhost:5000/products',values);
+                    await fetchDataToken('post','http://localhost:5000/products',values,users.token);
                     await loadProducts();
                     resetForm();
                 }
