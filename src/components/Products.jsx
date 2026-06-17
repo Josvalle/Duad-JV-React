@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useProduct } from '../contexts/ProductsContext';
 import sadFace from '../assets/sad-face.png';
-import './products.css';
+import './styles/products.css';
 
 function ProductList({ setPage }) {
-  const {products, setProducts, setProductSelected} = useProduct()
+  const {products,setProductSelected} = useProduct()
   
   const [pageLoading, setPageLoading] = useState(true);
 

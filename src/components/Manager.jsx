@@ -1,6 +1,9 @@
-import './manager.css'
+import './styles/manager.css'
 import { useProduct } from '../contexts/ProductsContext';
+import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
+import useToken from '../hooks/useToken'
+import candado from '../assets/candado.png'
 import * as Yup from 'yup';
 
 const objectValidation = Yup.object({
@@ -15,8 +18,30 @@ const objectValidation = Yup.object({
 
 
 function Manager({setPage}){
-    const {products, setProducts,setProductSelected} = useProduct()
-    return(
+    const {products, setProducts,setProductSelected, loadProducts} = useProduct()
+    const {fetchDataToken} = useToken(setProducts)
+    const {users,userAdmin,userLogin} = useUsers()
+
+
+    if(userLogin === false){
+        return(
+            <div className='no-admin-container' >
+                <img id='block-image' src={candado} alt="" />
+                <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
+                <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
+                <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+            </div>
+        )
+    }else if(userAdmin === false){
+        return(
+            <div className='no-admin-container' >
+                <img id='block-image' src={candado} alt="" />
+                <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
+                <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
+            </div>
+        )
+    }else{
+        return(
         <>
         <div id='administration-container'>
             <h1>Administración de productos</h1>
@@ -45,9 +70,9 @@ function Manager({setPage}){
                                     <td>
                                         <div className='buttons-actions'>
                                             <button id={product.id} onClick={()=> {setPage('edits'); setProductSelected(product.id)}} className='edit-button'>✎ Editar</button>
-                                            <button onClick={()=>{
-                                                
-                                                setProducts((deleteProduct)=> deleteProduct.filter((item)=>item.id !== product.id))
+                                            <button onClick={ async()=>{
+                                                await fetchDataToken('delete','http://localhost:5000/products',{"id":product.id},users.token);
+                                                await loadProducts();
                                             }} className='delete-button'> 🗑 Borrar</button>
                                         </div>
                                     </td>
@@ -65,14 +90,9 @@ function Manager({setPage}){
                 validationSchema={objectValidation}
                 validateOnChange={false}
                 validateOnBlur={false}
-                onSubmit={(values, {resetForm})=> {
-                    const highId = Math.max(...products.map((item)=>item.id))
-
-                    const newproduct = {
-                        id: highId +1,
-                        ...values,
-                    };
-                    setProducts((newproducts) => [...newproducts, newproduct]);
+                onSubmit={async (values, {resetForm})=> {
+                    await fetchDataToken('post','http://localhost:5000/products',values,users.token);
+                    await loadProducts();
                     resetForm();
                 }
 
@@ -109,9 +129,10 @@ function Manager({setPage}){
         </div>
         </>
         
-       
-        
     )
+    }
+
+    
 }
 
 export default Manager;

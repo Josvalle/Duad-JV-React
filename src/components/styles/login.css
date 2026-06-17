@@ -1,0 +1,49 @@
+#body-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 55em;
+    margin: 6em auto;
+}
+
+#login-form{
+    display: flex;
+    flex-direction: column;
+}
+
+#submit-login{
+    margin-bottom: 0.75em;
+    background-color: #5862d6;
+    color: white;
+}
+
+#cancel-login{
+    margin-bottom: 1.50em;
+}
+
+.login-buttons{
+    border-color: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 2.45em;
+    min-width: 27em;
+}
+
+.login-field{
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 4px;
+    height: 2em;
+}
+
+#ErrorMessage{
+    color: darkred;
+}
+
+#password{
+    margin-bottom: 0.50em;
+}
