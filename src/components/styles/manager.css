@@ -34,6 +34,7 @@ td{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .edit-button:active{
@@ -133,6 +134,8 @@ label{
     width: 16em;
     font-size: medium;
     font-weight: bold;
+    text-decoration: none;
+    text-align: center;
 }
 
 #no-login-message{

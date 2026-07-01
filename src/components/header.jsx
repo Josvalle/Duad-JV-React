@@ -1,10 +1,13 @@
 import './styles/Header.css';
 import pawlogo from '../assets/paw-logo.png';
 import { useUsers } from '../contexts/UsersContext';
+import { NavLink, Link, useNavigate } from 'react-router';
+import { useCart } from '../contexts/CartContext';
 
-
-function Header({ setPage }) {
+function Header() {
   const {users,userLogin,userAdmin,setUsers,setUserAdmin,setUserLogin} = useUsers()
+  const {cart,setCart} = useCart()
+  const navigate = useNavigate()
   return (
     <nav className="header">
       <div className="logo-title">
@@ -13,27 +16,35 @@ function Header({ setPage }) {
       </div>
 
       <div className="options">
-        <button onClick={() => setPage('home')}>Inicio</button>
-        <button onClick={() => setPage('products')}>Productos</button>
-        <button onClick={() => setPage('contact')}>Contacto</button>
+        <NavLink className={"header-Nav"} to="/">Inicio</NavLink>
+        <NavLink className={"header-Nav"} to="/products">Productos</NavLink>
+        <NavLink className={"header-Nav"} to="/contact">Contacto</NavLink>
         {userLogin === false ? 
-        (<button id='login-button' onClick={()=> setPage('login')}>Iniciar sesión</button>
+        (<NavLink id='login-button' className={"header-Nav"} to="/login">Iniciar sesión</NavLink>
 		) : users.role === 'admin' ? (<>
-          <button onClick={()=> setPage('manager')}>Administracion</button>
+          <NavLink className={"header-Nav"} to="/manager">Administracion</NavLink>
           <p>Session Iniciada como: {users.username}</p>
-          <button id='close-session' onClick={()=> {
-            setPage('home'); 
-            setUserLogin(false);
-            setUsers([])
-            setUserAdmin(false)
-            }}>Cerrar sesión</button>
+          <button className='cart-button' onClick={()=>navigate('/cart')}> 🛒 {cart.length}</button>
+          <NavLink id='close-session' className={"header-Nav"} to="/"
+            onClick={()=> {
+              setUserLogin(false);
+              setUsers([])
+              setUserAdmin(false)
+            }}
+          >Cerrar sesión</NavLink>
+          
           </>) : ( <>
           <p>Session Iniciada como: {users.username}</p>
-          <button id='close-session' onClick={()=> {
-            setPage('home'); 
-            setUserLogin(false);
-            setUsers([])
-            }}>Cerrar sesión</button>
+          <button className='cart-button' onClick={()=>navigate('/cart')}> 🛒 {cart.length}</button>
+          <NavLink id='close-session' className={"header-Nav"} to="/"
+            onClick={()=> {
+              setUserLogin(false);
+              setUsers([])
+              setUserAdmin(false);
+              setCart([])
+              
+            }}
+          >Cerrar sesión</NavLink>
           </>
         )}
       </div>

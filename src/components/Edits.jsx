@@ -1,6 +1,7 @@
 import './styles/edits.css'
 import { useProduct } from '../contexts/ProductsContext'
 import { useUsers } from '../contexts/UsersContext';
+import { useParams, Link,useNavigate } from 'react-router';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import useToken from '../hooks/useToken'
@@ -17,10 +18,13 @@ const objectValidation = Yup.object({
 })
 
 function Edits({setPage}){
-    const {products,productSelected,setProducts,loadProducts} = useProduct()
+    const {products,setProducts,loadProducts} = useProduct()
     const {fetchDataToken} = useToken(setProducts)
     const {users,userAdmin,userLogin} = useUsers()
-    const product = products.find(item => item.id === productSelected);
+    const navigate = useNavigate()
+    const {id} = useParams();
+    const idNumber = Number(id);
+    const product = products.find(item => item.id === idNumber);
 
     if(userLogin === false){
             return(
@@ -28,7 +32,9 @@ function Edits({setPage}){
                     <img id='block-image' src={candado} alt="" />
                     <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
                     <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                    <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+                    <button className='permssion-buttons' id='go-login' onClick={()=>navigate('/login')}>Iniciar sesion</button>
+                    
+                    
                 </div>
             )
         }else if(userAdmin === false){
@@ -36,7 +42,8 @@ function Edits({setPage}){
                 <div className='no-admin-container' >
                     <img id='block-image' src={candado} alt="" />
                     <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                    <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
+                    <button className='permssion-buttons' id='home-return' onClick={()=>navigate('/')}>Volver al Inicio</button>
+                    
                 </div>
             )
         }else if(!product){
@@ -55,12 +62,12 @@ function Edits({setPage}){
             validationSchema={objectValidation}
             onSubmit={async (values)=>{
                     const send_values ={
-                        "id": product.id,
+                        "id": idNumber,
                         ...values
                     }
                     await fetchDataToken('put','http://localhost:5000/products',send_values,users.token);
                     await loadProducts();
-                    setPage('manager');
+                    navigate('/manager');
             }}
             >
             <Form id='edit-product-form'>
@@ -89,7 +96,8 @@ function Edits({setPage}){
                         <ErrorMessage name='stock' component="p" />
                         <div id='buttons-containers'>
                             <button id='submit-edit' type='submit'> 💾 Guardar cambios</button>
-                            <button id='cancel-submit' type='button' onClick={()=> setPage('manager')}>❌ Cancelar</button>
+                            <button id='cancel-submit' onClick={()=> navigate('/manager')} >❌ Cancelar</button>
+                            
                         </div>
                         
                     </Form>

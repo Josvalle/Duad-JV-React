@@ -1,4 +1,5 @@
 import './styles/home.css';
+import { Link } from 'react-router';
 
 function Home({ setPage }) {
   return (
@@ -12,9 +13,7 @@ function Home({ setPage }) {
         Explora nuestro catálogo para encontrar camas, juguetes, accesorios y
         más.
       </p>
-      <button id="b-products" onClick={() => setPage('products')}>
-        Ver productos
-      </button>
+      <Link id="b-products" to='/products'>Ver productos</Link>
       <p id="info-text" className="home-text">
         Esta es la página principal de la aplicación. Más adelante aquí se
         podrán mostrar productos destacados.

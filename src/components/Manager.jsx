@@ -2,9 +2,12 @@ import './styles/manager.css'
 import { useProduct } from '../contexts/ProductsContext';
 import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
+import { Link, useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import useToken from '../hooks/useToken'
 import candado from '../assets/candado.png'
 import * as Yup from 'yup';
+
 
 const objectValidation = Yup.object({
     nombre: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
@@ -17,11 +20,18 @@ const objectValidation = Yup.object({
 
 
 
-function Manager({setPage}){
+function Manager(){
     const {products, setProducts,setProductSelected, loadProducts} = useProduct()
     const {fetchDataToken} = useToken(setProducts)
     const {users,userAdmin,userLogin} = useUsers()
+    const navigate = useNavigate()
 
+    useEffect(()=>{
+        async function loadInfo() {
+            await loadProducts()
+        }
+        loadInfo()
+    },[loadProducts])
 
     if(userLogin === false){
         return(
@@ -29,7 +39,7 @@ function Manager({setPage}){
                 <img id='block-image' src={candado} alt="" />
                 <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
                 <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
+                <button className='permssion-buttons' id='go-login' onClick={()=>navigate('/login')} >Iniciar sesion</button>
             </div>
         )
     }else if(userAdmin === false){
@@ -37,7 +47,7 @@ function Manager({setPage}){
             <div className='no-admin-container' >
                 <img id='block-image' src={candado} alt="" />
                 <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
+                <button className='permssion-buttons' id='home-return' onClick={()=>navigate('/')}>Iniciar sesion</button>
             </div>
         )
     }else{
@@ -69,7 +79,8 @@ function Manager({setPage}){
                                     <td>{product.stock}</td>
                                     <td>
                                         <div className='buttons-actions'>
-                                            <button id={product.id} onClick={()=> {setPage('edits'); setProductSelected(product.id)}} className='edit-button'>✎ Editar</button>
+                                            <button id={product.id} className='edit-button' onClick={()=>{navigate(`/manager/${product.id}`)}}>✎ Editar</button>
+                                            
                                             <button onClick={ async()=>{
                                                 await fetchDataToken('delete','http://localhost:5000/products',{"id":product.id},users.token);
                                                 await loadProducts();

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useProduct } from '../contexts/ProductsContext';
 import sadFace from '../assets/sad-face.png';
+import { Link } from 'react-router';
 import './styles/products.css';
 
 function ProductList({ setPage }) {
@@ -49,15 +50,10 @@ function ProductList({ setPage }) {
               <h3 className="title-product">{product.nombre}</h3>
               <p className="product-price">₡{product.precio}</p>
               <p className="category">{product.categoria}</p>
-              <button
-                onClick={() => {
-                  setProductSelected(product.id);
-                  setPage('details');
-                }}
-                className="card-button"
-              >
-                Ver detalles
-              </button>
+              <Link className='card-button' to={`/products/${product.id}`}>
+              Ver detalles
+              </Link>
+              
             </div>
           </div>
         ))}

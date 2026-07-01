@@ -4,6 +4,7 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import useApi from '../hooks/useApi'
 import { useUsers } from '../contexts/UsersContext';
+import { useNavigate, Link } from 'react-router';
 
 
 const objectValidation = Yup.object({
@@ -12,6 +13,7 @@ const objectValidation = Yup.object({
 })
 
 function Login({setPage}){
+    const navigate = useNavigate()
     const {users,setUsers,setUserLogin,userAdmin,setUserAdmin} = useUsers()
     const {loading, error,fetchData} = useApi(setUsers)
     const [loginError, setLoginError] = useState('');
@@ -33,13 +35,13 @@ function Login({setPage}){
                         setUsers(response.data);
                         setUserLogin(true);
                         setUserAdmin(true)
-                        setPage('manager');
+                        navigate('/manager');
                         resetForm();
                         
                     }else if(response.status === 200){
                         setUsers(response.data);
                         setUserLogin(true);
-                        setPage('products');
+                        navigate('/products');
                         resetForm();
                     }else if(response.status === 409){
                         setLoginError('Las credenciales proporcionadas no son válidas. Por favor verifica tu correo y contraseña.')
@@ -61,7 +63,8 @@ function Login({setPage}){
                         
                         
                         <button className='login-buttons' id='submit-login' type='submit'> 👤 Ingresar</button>
-                        <button className='login-buttons' id='cancel-login' type='button' onClick={()=> setPage('home')}>❌ Cancelar</button>
+                        <Link className='login-buttons' id='cancel-login' to='/' > ❌ Cancelar</Link>
+                        
                         
                     </Form>
 

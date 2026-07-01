@@ -40,6 +40,8 @@
   width: 26em;
   height: 2.25em;
   cursor: pointer;
+  text-decoration: none;
+  padding: 0.20em;
 }
 
 .card-button:active {

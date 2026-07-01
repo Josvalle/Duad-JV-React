@@ -1,0 +1,126 @@
+.form-details-container{
+    display: flex;
+    justify-content: space-around;
+}
+
+#checkout-form{
+    display: flex;
+    flex-direction: column;
+    
+}
+.titles-checkout{
+    text-align: center;
+}
+
+.purchase-details{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.checkout-details-container{
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 8px;
+    padding: 2em;
+    width: 50vh;
+    border-width: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.checkout-form-container{
+    border-color: lightgray;
+    border-style: solid;
+    border-radius: 8px;
+    padding: 2em;
+    width: 50vh;
+    border-width: 2px;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#checkout-quantity{
+    font-size: small;
+    color: rgba(80, 80, 80, 0.993);
+    margin: 0;
+    
+}
+
+#checkout-name{
+    font-weight:500;
+    margin-bottom: 0;
+}
+
+.checkout-subtotal-item{
+    text-align: end;
+    font-weight:500;
+}
+
+#button-chekout-container{
+    display: flex;
+    flex-direction: column;
+    }
+
+.checkout-buttons{
+    margin: 0.35em;
+    height: 2.50em;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#confirm-button-p{
+    color: white;
+    background-color: #5864e2;
+    border-color: transparent;
+    
+}
+
+#cancel-button-p{
+    background-color: transparent;
+    border-width: 1px;
+    border-style: solid;
+    border-color: lightgray;
+}
+
+#cancel-button-p:active{
+    color: red;
+}
+
+#confirm-button-p:active{
+    background-color: blue;
+}
+
+
+.field-checkout{
+    height: 2.50em;
+    border-width: 1px;
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 8px;
+}
+
+.label-checkout{
+    font-weight: 420;
+}
+
+
+#body-confirmation{
+    margin: 3em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#return-product{
+    border-radius: 8px;
+    height: 3em;
+    width: 15em;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background-color: #5864e2;
+    border-color: transparent;
+}
