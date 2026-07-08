@@ -17,14 +17,14 @@ import { ProvideCart } from './contexts/CartContext';
 import { Routes, Route} from 'react-router-dom'
 
 function App() {
-  const [page, setPage] = useState('home');
+  
   
 
   return (
     <div className="app">
       <ProvideCart>
       <ProvideUsers>
-      <Header setPage={setPage} />
+      <Header  />
       <ProvideProduct>
         <main className="main-content">
         

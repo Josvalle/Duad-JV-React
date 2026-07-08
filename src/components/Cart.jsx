@@ -4,66 +4,61 @@ import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useUsers } from '../contexts/UsersContext';
 import sadFace from '../assets/sad-face.png';
-import candado from '../assets/candado.png'
+import NotLogin from './userNotLogin';
 import axios from 'axios';
 
 function Cart(){
-    const {cart,setCart} = useCart();
+    const {cart,total,setTotal,setCart,addToCart,deleteToCart,reduceToCart,loadCart,loading,error,bError} = useCart();
     const [stock,setStock] = useState([]);
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(true);
-    const {users, userLogin} = useUsers()
-
-    const total = cart.reduce((counter,item)=>{
-        const subtotal = item.cantidad * item.precio;
-        return counter + subtotal
-    },0)
+    const navigate = useNavigate();
+    const {users, userLogin} = useUsers();
+    const API_URL = import.meta.env.VITE_URL;
+    
+    
 
     useEffect(()=>{
         async function loadStock() {
 
         try{
-            const res = await axios.get(`http://localhost:5000//products/details/stock`)
-            if (users?.id !== undefined){
-                const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-                setCart(cartItems.data)
-            }
-            
+            const res = await axios.get(`${API_URL}/products/details/stock`)
+            console.log(users.id)
+            await loadCart(users.id)
+            console.log(res.data)
             setStock(res.data)
-        }catch(err){
-            setError('El producto que busca no se encontro o ya no se encuentra')
-
-        }finally{
-            setLoading(false)
-        }
             
+        }catch(error){
+            setError('El producto que busca no se encontro o ya no se encuentra')
+        }
         }
         loadStock()
-    },[])
+    },[users.id])
 
     if(userLogin === false){
-            return(
-                <div className='no-admin-container' >
-                    <img id='block-image' src={candado} alt="" />
-                    <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
-                    <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                    <button className='permssion-buttons' id='go-login' onClick={()=>navigate('/login')} >Iniciar sesion</button>
-                </div>
-            )
+            return <NotLogin />
         }else if (cart.length===0){
         return(
             <div id='empty-cart-div'>
                 <img id="no-product-image" src={sadFace} alt="" />
-                <h2>No hay productos agregados por el momento.</h2>
+                <h2>Tu carrito está vacío.</h2>
             </div>
         )
     }else if (loading === true){
-        <div id='loading-container'>
-            <div className='spinner'></div>
-            <h2 id='h2-title-loading'>
-                Cargando carrito ....
-            </h2>
-        </div>
+        return(
+            <div id='loading-container'>
+                <div className='spinner'></div>
+                <h2 id='h2-title-loading'>
+                    Cargando carrito ....
+                </h2>
+            </div>
+        )
+        
+    }else if(bError){
+        return(
+            <div id='backend-error-div'>
+                <img id="no-product-image" src={sadFace} alt="" />
+                <h2>Hubo un error con el proceso por favor intente de nuevo</h2>
+            </div>
+        )
     }else{
         return(
             <div id='cart-body-container'>
@@ -71,8 +66,16 @@ function Cart(){
                 <div className='card-subtotal'>
                         <div id='cart-card-container'>
                             {cart.map((item)=>{
+
                                     const productStock = stock.find((product)=>product.id === item.id)
-                
+                                    if (!productStock) {
+                                                    return (
+                                                    <div key={item.id} className="item-card">
+                                                        <p>{item.nombre}</p>
+                                                        <p>Cargando stock...</p>
+                                                    </div>
+                                                    );
+                                                }
                                 return(
                                 
                                 <div key={item.id} className='item-card'>
@@ -82,30 +85,22 @@ function Cart(){
                                         <button className='cart-car-button' id='less-button' onClick={async()=>{
                                                                     
                                                                 if(item.cantidad === 1){
-                                                                    await axios.delete(`http://localhost:5000/cart/delete/${item.id}`, {data: {"user_id":users.id}} )
-                                                                    const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-                                                                    setCart(cartItems.data)
+                                                                    await deleteToCart(API_URL,item.id,users.id,item.cantidad)
+                                                                }else{
+                                                                    await reduceToCart(API_URL,item.id,users.id)
+                                                                    const resC = await axios.get(`${API_URL}/products/details/stock`);
+                                                                    setStock(resC.data);
                                                                 }
-                                                                await axios.put(`http://localhost:5000/cart/details/reduce/${item.id}`)
-                                                                await axios.put(`http://localhost:5000/products/details/adding/${item.id}`)
-                                                                const resC = await axios.get(`http://localhost:5000//products/details/stock`)
-                                                                const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-                                                                setCart(cartItems.data)
-                                                                setStock(resC.data)
+                                                                
                                                                 }}>-</button>
                                         <p className='quantity-p'>{item.cantidad}</p>
                                         {productStock.stock !== 0 ? (<button className='cart-car-button' id='add-button' 
                                         disabled={productStock.stock ===0}
                                         onClick={async ()=>{
-                                                await axios.put(`http://localhost:5000/cart/details/add/${item.id}`)
-                                                await axios.put(`http://localhost:5000/products/details/reduce/${item.id}`)
-                                                const resC = await axios.get(`http://localhost:5000//products/details/stock`)
-                                                const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-                                                setCart(cartItems.data)
+                                                await addToCart(API_URL,item.id,users.id)
+                                                const resC = await axios.get(`${API_URL}/products/details/stock`)
                                                 setStock(resC.data)
-                                                
-                                                                                        }} >+</button>):
-                                                                                        (<p> No hay mas stock para agregar </p>) }
+                                                    }} >+</button>):(<p> No hay mas stock para agregar </p>) }
                                         
                                     </div>
                                     
@@ -115,15 +110,8 @@ function Cart(){
                                     </div>
                                     <button className='delete-card-button'
                                     onClick={async()=>{
-                                                const body = {
-                                                    "stock":item.cantidad
-                                                }
-                                                await axios.delete(`http://localhost:5000/cart/delete/${item.id}`, {data: {"user_id":users.id}} )
-                                                await axios.put(`http://localhost:5000/products/details/adding/${item.id}`, body)
-                                                const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-                                                setCart(cartItems.data)
-                                                
-                                    }}>🗑 Eliminar</button>
+                                                await deleteToCart(API_URL,item.id,users.id,item.cantidad)
+                                    }}>🗑 Quitar</button>
                                 </div>
                                 )
                             })}
@@ -134,7 +122,7 @@ function Cart(){
                                 <p>₡{total}</p>
                             </div>
                             
-                            <button className='checkout-button' onClick={()=>navigate('/checkout')}> Continuar al Checkout</button>
+                            <button className='checkout-button' onClick={()=>navigate('/checkout')}> Ir al checkout</button>
                         </div>
                 </div>
                 

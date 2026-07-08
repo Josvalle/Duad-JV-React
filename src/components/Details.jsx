@@ -15,13 +15,14 @@ function Details() {
   const [productDetails,setProductDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {cart, setCart} = useCart()
+  const {cart, setCart, addToCart} = useCart()
+  const API_URL = import.meta.env.VITE_URL
   
     useEffect(()=>{
       async function loadDetails() {
         
         try{
-          const res = await axios.get(`http://localhost:5000/products/details/${idNumber}`)
+          const res = await axios.get(`${API_URL}/products/details/${idNumber}`)
           setProductDetails(res.data)
           
         }catch(err){
@@ -71,34 +72,9 @@ function Details() {
 
           <p id='current-stock'>Stock: {productDetails.stock}</p>
           <button className='add-cart' onClick={async ()=>{
-            
-            const itemExist = cart.some( item => item.id === productDetails.id)
-            
-
-            if(itemExist === true){
-              await axios.put(`http://localhost:5000/cart/details/add/${idNumber}`)
-              await axios.put(`http://localhost:5000/products/details/reduce/${idNumber}`)
-              const res = await axios.get(`http://localhost:5000/products/details/${idNumber}`);
-              const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-              setCart(cartItems.data) 
-              setProductDetails(res.data);
-              
-            }else{
-              const backend_item = {
-                'user_id': users.id,
-                'product_id':productDetails.id,
-                "cantidad": 1
-              }
-            
-            await axios.post('http://localhost:5000/cart/new', backend_item)
-            await axios.put(`http://localhost:5000/products/details/reduce/${idNumber}`)
-            const res = await axios.get(`http://localhost:5000/products/details/${idNumber}`);
-            const cartItems = await axios.get(`http://localhost:5000/cart/${users.id}`)
-            setCart(cartItems.data)  
+            await addToCart(API_URL,idNumber,users.id)
+            const res = await axios.get(`${API_URL}/products/details/${idNumber}`);
             setProductDetails(res.data);  
-            }
-            
-
           }}>Agregar al carrito</button>
           </>
           

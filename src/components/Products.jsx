@@ -4,38 +4,25 @@ import sadFace from '../assets/sad-face.png';
 import { Link } from 'react-router';
 import './styles/products.css';
 
-function ProductList({ setPage }) {
-  const {products,setProductSelected} = useProduct()
+function ProductList() {
+  const {products,setProductSelected,loading} = useProduct()
   
-  const [pageLoading, setPageLoading] = useState(true);
 
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPageLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (pageLoading) {
+  if (loading) {
     return (
       <div id="loding-message">
         <h2>Cargando Productos...</h2>
       </div>
     );
-  }
-
-  if (products.length === 0) {
+  }else if (products.length === 0 ) {
     return (
       <div className="no-products">
         <img id="no-product-image" src={sadFace} alt="" />
         <h2>No hay productos disponibles por el momento.</h2>
       </div>
     );
-  }
-
-  return (
+  }else{
+    return (
     <div className="body-container">
       <h2 className="page-title">Catálogo de productos</h2>
       <div className="cards-container">
@@ -60,6 +47,9 @@ function ProductList({ setPage }) {
       </div>
     </div>
   );
+  }
+
+  
 }
 
 export default ProductList;

@@ -14,9 +14,10 @@ export function ProvideProduct({children}){
     const [products, setProducts] = useState([]);
     const [productSelected, setProductSelected] = useState(null);
     const { loading, error, fetchData } = useApi(setProducts);
+    const API_URL = import.meta.env.VITE_URL;
 
     const loadProducts = React.useCallback(()=>{
-        fetchData('get','http://localhost:5000/products')
+        fetchData('get',`${API_URL}/products`)
     },[fetchData])
 
     useEffect(()=>{

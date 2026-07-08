@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import 'yup-phone-lite';
 import { useState } from 'react';
 import confirmation from '../assets/confirmation.png';
-import sadFace from '../assets/sad-face.png';
+import NotLogin from './userNotLogin';
 import candado from '../assets/candado.png';
 
 
@@ -21,43 +21,42 @@ const objectValidation = Yup.object({
 })
 
 function Checkout(){
-    const {cart,setCart} = useCart();
+    const {cart,setCart,total} = useCart();
     const {users, userLogin} = useUsers();
     const navigate = useNavigate();
-    const [purchaseComplete, setPurchaseComplete] = useState(false)
-    const {fetchData} =useApi()
+    const [purchaseComplete, setPurchaseComplete] = useState(false);
+    const {fetchData} =useApi();
+    const API_URL = import.meta.env.VITE_URL;
+    const [backendError, setBackendError] = useState(false);
 
-    const total = cart.reduce((counter,item)=>{
-        const subtotal = item.cantidad * item.precio;
-        return counter + subtotal
-    },0);
     if(userLogin === false){
-                return(
-                    <div className='no-admin-container' >
-                        <img id='block-image' src={candado} alt="" />
-                        <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
-                        <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                        <button className='permssion-buttons' id='go-login' onClick={()=>navigate('/login')} >Iniciar sesion</button>
-                    </div>
-                )
-            }else if (cart.length===0 && purchaseComplete === false){
+                return <NotLogin />
+        }else if (cart.length===0 && purchaseComplete === false){
             return(
                 <div id='empty-cart-div'>
                     <img id="no-product-image" src={sadFace} alt="" />
                     <h2>No hay productos agregados por el momento.</h2>
                 </div>
             )
+        }else if(backendError === true){
+            return(
+            <div id='empty-cart-div'>
+                    <img id="no-product-image" src={sadFace} alt="" />
+                    <h2>Ocurrió un problema al procesar tu compra. Por favor intenta de nuevo.  </h2>
+                </div>
+            )
+            
         }else if (purchaseComplete === true){
+            return(
+                <div id='body-confirmation'>
+                    <img className='confirmation-image'src={confirmation} alt="logo" />
+                    <h1 className='title-confirmation'>¡Gracias por tu compra!</h1>
+                    <p className='text-confirmation'>Hemos enviado un correo de confirmación con los detalles de tu pedido.</p>
+                    <button id='return-product' onClick={()=>navigate('/products')}>Volver al catálogo</button>
+                </div>
+            )
+    }else{
         return(
-            <div id='body-confirmation'>
-                <img className='confirmation-image'src={confirmation} alt="logo" />
-                <h1 className='title-confirmation'>¡Gracias por tu compra!</h1>
-                <p className='text-confirmation'>Hemos enviado un correo de confirmación con los detalles de tu pedido.</p>
-                <button id='return-product' onClick={()=>navigate('/products')}>Volver al catálogo</button>
-            </div>
-        )
-    }
-    return(
         <div className='checkout-body'>
             <div className='titles-checkout'>
                 <h1 className='checkout-title'>Checkout</h1>
@@ -86,10 +85,15 @@ function Checkout(){
                             'products':cart_without_images
                             
                         }
-                        await fetchData('post','http://localhost:5000/checkout/complete',body)
-                        setPurchaseComplete(true)
-                        setCart([])
-                        resetForm();
+                        const res = await fetchData('post',`${API_URL}/checkout/complete`,body)
+                        if (res.status === 200){
+                            setPurchaseComplete(true)
+                            setCart([])
+                            resetForm();
+                        }else{
+                            setBackendError(true)
+                        }
+                        
                     }}
                     
                     >
@@ -108,7 +112,7 @@ function Checkout(){
 
                             <label className='label-checkout' htmlFor="telefono">Telefono: </label>
                             <Field id='telefono' name='telefono' className='field-checkout' placeholder='Por favor ingrese su telefono Ej: 506-XXXX-XXXX' ></Field>
-                            <ErrorMessage name='direccion' component="p" />
+                            <ErrorMessage name='telefono' component="p" />
                         </Form>
                     </Formik>
                 </div>
@@ -155,6 +159,8 @@ function Checkout(){
             
         </div>
     )
+    }
+    
 }
 
 export default Checkout

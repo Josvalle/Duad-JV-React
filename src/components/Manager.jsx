@@ -4,8 +4,9 @@ import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import { Link, useNavigate } from 'react-router';
 import { useEffect } from 'react';
-import useToken from '../hooks/useToken'
-import candado from '../assets/candado.png'
+import NotLogin from './userNotLogin';
+import NotAdmin from './NotAdmin';
+import useToken from '../hooks/useToken';
 import * as Yup from 'yup';
 
 
@@ -21,10 +22,11 @@ const objectValidation = Yup.object({
 
 
 function Manager(){
-    const {products, setProducts,setProductSelected, loadProducts} = useProduct()
-    const {fetchDataToken} = useToken(setProducts)
-    const {users,userAdmin,userLogin} = useUsers()
-    const navigate = useNavigate()
+    const {products, setProducts,setProductSelected, loadProducts} = useProduct();
+    const {fetchDataToken} = useToken(setProducts);
+    const {users,userAdmin,userLogin} = useUsers();
+    const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_URL;
 
     useEffect(()=>{
         async function loadInfo() {
@@ -34,22 +36,9 @@ function Manager(){
     },[loadProducts])
 
     if(userLogin === false){
-        return(
-            <div className='no-admin-container' >
-                <img id='block-image' src={candado} alt="" />
-                <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
-                <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                <button className='permssion-buttons' id='go-login' onClick={()=>navigate('/login')} >Iniciar sesion</button>
-            </div>
-        )
+        return <NotLogin />
     }else if(userAdmin === false){
-        return(
-            <div className='no-admin-container' >
-                <img id='block-image' src={candado} alt="" />
-                <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                <button className='permssion-buttons' id='home-return' onClick={()=>navigate('/')}>Iniciar sesion</button>
-            </div>
-        )
+        return <NotAdmin />
     }else{
         return(
         <>
@@ -82,7 +71,7 @@ function Manager(){
                                             <button id={product.id} className='edit-button' onClick={()=>{navigate(`/manager/${product.id}`)}}>✎ Editar</button>
                                             
                                             <button onClick={ async()=>{
-                                                await fetchDataToken('delete','http://localhost:5000/products',{"id":product.id},users.token);
+                                                await fetchDataToken('delete',`${API_URL}/products`,{"id":product.id},users.token);
                                                 await loadProducts();
                                             }} className='delete-button'> 🗑 Borrar</button>
                                         </div>
@@ -102,7 +91,7 @@ function Manager(){
                 validateOnChange={false}
                 validateOnBlur={false}
                 onSubmit={async (values, {resetForm})=> {
-                    await fetchDataToken('post','http://localhost:5000/products',values,users.token);
+                    await fetchDataToken('post',`${API_URL}/products`,values,users.token);
                     await loadProducts();
                     resetForm();
                 }

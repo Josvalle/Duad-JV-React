@@ -24,7 +24,7 @@ function Header() {
 		) : users.role === 'admin' ? (<>
           <NavLink className={"header-Nav"} to="/manager">Administracion</NavLink>
           <p>Session Iniciada como: {users.username}</p>
-          <button className='cart-button' onClick={()=>navigate('/cart')}> 🛒 {cart.length}</button>
+          <NavLink className='cart-button' to="/cart">🛒 Carrito {cart.length}</NavLink>
           <NavLink id='close-session' className={"header-Nav"} to="/"
             onClick={()=> {
               setUserLogin(false);
@@ -35,7 +35,7 @@ function Header() {
           
           </>) : ( <>
           <p>Session Iniciada como: {users.username}</p>
-          <button className='cart-button' onClick={()=>navigate('/cart')}> 🛒 {cart.length}</button>
+          <NavLink className='cart-button' to="/cart">🛒 Carrito {cart.length}</NavLink>
           <NavLink id='close-session' className={"header-Nav"} to="/"
             onClick={()=> {
               setUserLogin(false);

@@ -2,7 +2,7 @@ import {useState, useCallback} from 'react';
 import axios from 'axios'
 
 function useApi(setData ){
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null)
 
     const fetchData = useCallback(async (method,url,body=null)=>{

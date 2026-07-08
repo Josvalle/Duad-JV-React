@@ -1,7 +1,7 @@
 import './styles/home.css';
 import { Link } from 'react-router';
 
-function Home({ setPage }) {
+function Home() {
   return (
     <div className="body-home">
       <h1>Bienvenido a PawStore</h1>

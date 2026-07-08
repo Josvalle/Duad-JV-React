@@ -12,12 +12,12 @@ const objectValidation = Yup.object({
     password: Yup.string().required('Contraseña no puede estar vacia')
 })
 
-function Login({setPage}){
+function Login(){
     const navigate = useNavigate()
     const {users,setUsers,setUserLogin,userAdmin,setUserAdmin} = useUsers()
     const {loading, error,fetchData} = useApi(setUsers)
     const [loginError, setLoginError] = useState('');
-    
+    const API_URL = import.meta.env.VITE_URL;
 
 
     return(
@@ -29,7 +29,7 @@ function Login({setPage}){
                 validateOnChange={false}
                 validateOnBlur={false}
                 onSubmit={async(values,{resetForm})=>{
-                    const response = await fetchData('post','http://localhost:5000/login',values)
+                    const response = await fetchData('post',`${API_URL}/login`,values)
                     
                     if (response.status === 200 && response.data.role === 'admin'){
                         setUsers(response.data);
