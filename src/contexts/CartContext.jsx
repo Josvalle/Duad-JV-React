@@ -6,6 +6,9 @@ const CartContext = createContext({
     cart: [],
     total:null,
     bError:false,
+    load:true,
+    setLoad:()=>{},
+    setBError:()=>{},
     setCart: ()=>{},
     addToCart:()=>{},
     deleteToCart:()=>{},
@@ -15,8 +18,8 @@ const CartContext = createContext({
 
 export function ProvideCart({children}){
     const [cart, setCart] = useState([]);
-    const { loading, error, fetchData } = useApi(setCart);
     const [bError,setBError] = useState(false)
+    const [load,setLoad]=useState(true)
     const API_URL = import.meta.env.VITE_URL;
 
 
@@ -27,9 +30,15 @@ export function ProvideCart({children}){
                             }, [cart]);
 
 
-    async function loadCart(userID) {
-        const cartData = await fetchData('get',`${API_URL}/cart/${userID}`)
-        setCart(cartData.data)
+    async function loadCart(apiUrl,userID) {
+        setBError(false)
+        try{
+            const cartData = await axios.get(`${apiUrl}/cart/${userID}`)
+            setCart(cartData.data)
+        }catch{
+            setBError(true)
+        }
+        
         
     }
 
@@ -110,9 +119,10 @@ export function ProvideCart({children}){
         reduceToCart,
         loadCart,
         bError,
-        loading,
-        error,
-    }),[cart,total,bError,addToCart,deleteToCart,reduceToCart,loadCart,loading,error]);
+        load,
+        setLoad,
+        setBError,
+    }),[cart,total,bError,load,setLoad,setBError,addToCart,deleteToCart,reduceToCart,loadCart]);
 
     return(
         <CartContext.Provider value={contextValues}>

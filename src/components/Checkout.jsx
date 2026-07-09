@@ -8,8 +8,8 @@ import * as Yup from 'yup';
 import 'yup-phone-lite';
 import { useState } from 'react';
 import confirmation from '../assets/confirmation.png';
-import NotLogin from './userNotLogin';
-import candado from '../assets/candado.png';
+import NotLogin from './UserNotLogin';
+import sadFace from '../assets/sad-face.png'
 
 
 const objectValidation = Yup.object({
@@ -86,7 +86,9 @@ function Checkout(){
                             
                         }
                         const res = await fetchData('post',`${API_URL}/checkout/complete`,body)
-                        if (res.status === 200){
+                        if(!res){
+                            setBackendError(true)
+                        }else if (res.status === 200){
                             setPurchaseComplete(true)
                             setCart([])
                             resetForm();

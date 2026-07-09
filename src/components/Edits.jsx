@@ -6,7 +6,7 @@ import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import useToken from '../hooks/useToken'
 import sadFace from '../assets/sad-face.png';
-import NotLogin from './userNotLogin';
+import NotLogin from './UserNotLogin';
 import NotAdmin from './NotAdmin';
 
 const objectValidation = Yup.object({

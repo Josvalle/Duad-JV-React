@@ -4,7 +4,7 @@ import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import { Link, useNavigate } from 'react-router';
 import { useEffect } from 'react';
-import NotLogin from './userNotLogin';
+import NotLogin from './UserNotLogin';
 import NotAdmin from './NotAdmin';
 import useToken from '../hooks/useToken';
 import * as Yup from 'yup';
@@ -22,7 +22,7 @@ const objectValidation = Yup.object({
 
 
 function Manager(){
-    const {products, setProducts,setProductSelected, loadProducts} = useProduct();
+    const {products, setProducts, loadProducts} = useProduct();
     const {fetchDataToken} = useToken(setProducts);
     const {users,userAdmin,userLogin} = useUsers();
     const navigate = useNavigate();

@@ -4,11 +4,11 @@ import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useUsers } from '../contexts/UsersContext';
 import sadFace from '../assets/sad-face.png';
-import NotLogin from './userNotLogin';
+import NotLogin from './UserNotLogin';
 import axios from 'axios';
 
 function Cart(){
-    const {cart,total,setTotal,setCart,addToCart,deleteToCart,reduceToCart,loadCart,loading,error,bError} = useCart();
+    const {cart,total,setCart,addToCart,deleteToCart,reduceToCart,loadCart,bError,setBError,load,setLoad} = useCart();
     const [stock,setStock] = useState([]);
     const navigate = useNavigate();
     const {users, userLogin} = useUsers();
@@ -21,13 +21,11 @@ function Cart(){
 
         try{
             const res = await axios.get(`${API_URL}/products/details/stock`)
-            console.log(users.id)
-            await loadCart(users.id)
-            console.log(res.data)
+            await loadCart(API_URL,users.id)
             setStock(res.data)
-            
+            setLoad(false)
         }catch(error){
-            setError('El producto que busca no se encontro o ya no se encuentra')
+            setBError(true)
         }
         }
         loadStock()
@@ -35,14 +33,7 @@ function Cart(){
 
     if(userLogin === false){
             return <NotLogin />
-        }else if (cart.length===0){
-        return(
-            <div id='empty-cart-div'>
-                <img id="no-product-image" src={sadFace} alt="" />
-                <h2>Tu carrito está vacío.</h2>
-            </div>
-        )
-    }else if (loading === true){
+        }else if (load === true){
         return(
             <div id='loading-container'>
                 <div className='spinner'></div>
@@ -57,6 +48,13 @@ function Cart(){
             <div id='backend-error-div'>
                 <img id="no-product-image" src={sadFace} alt="" />
                 <h2>Hubo un error con el proceso por favor intente de nuevo</h2>
+            </div>
+        )
+    }else if (cart.length===0){
+        return(
+            <div id='empty-cart-div'>
+                <img id="no-product-image" src={sadFace} alt="" />
+                <h2>Tu carrito está vacío.</h2>
             </div>
         )
     }else{

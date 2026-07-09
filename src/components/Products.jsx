@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import './styles/products.css';
 
 function ProductList() {
-  const {products,setProductSelected,loading} = useProduct()
+  const {products,loading} = useProduct()
   
 
   if (loading) {

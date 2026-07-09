@@ -2,6 +2,7 @@ import candado from '../assets/candado.png'
 import { useNavigate } from 'react-router';
 
 function NotAdmin(){
+    const navigate = useNavigate()
     return(
             <div className='no-admin-container' >
                 <img id='block-image' src={candado} alt="" />
