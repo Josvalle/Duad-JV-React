@@ -1,0 +1,16 @@
+#not-found-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5em;
+}
+
+#not-found-b{
+    cursor: pointer;
+    border-radius: 5px;
+    height: 2.55em;
+    border-color: transparent;
+    background-color: #5862d6;
+    color: aliceblue;
+    font-weight: bold;
+}

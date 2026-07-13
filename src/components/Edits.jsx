@@ -1,11 +1,13 @@
 import './styles/edits.css'
 import { useProduct } from '../contexts/ProductsContext'
 import { useUsers } from '../contexts/UsersContext';
+import { useParams, Link,useNavigate } from 'react-router';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import useToken from '../hooks/useToken'
 import sadFace from '../assets/sad-face.png';
-import candado from '../assets/candado.png'
+import NotLogin from './UserNotLogin';
+import NotAdmin from './NotAdmin';
 
 const objectValidation = Yup.object({
     nombre: Yup.string().required('Por favor completa todos los campos antes de completar la ediccion. '),
@@ -16,29 +18,20 @@ const objectValidation = Yup.object({
     stock: Yup.number().required('Por favor completa todos los campos antes de completar la ediccion. ')
 })
 
-function Edits({setPage}){
-    const {products,productSelected,setProducts,loadProducts} = useProduct()
+function Edits(){
+    const {products,setProducts,loadProducts} = useProduct()
     const {fetchDataToken} = useToken(setProducts)
     const {users,userAdmin,userLogin} = useUsers()
-    const product = products.find(item => item.id === productSelected);
+    const navigate = useNavigate()
+    const {id} = useParams();
+    const idNumber = Number(id);
+    const product = products.find(item => item.id === idNumber);
+    const API_URL = import.meta.env.VITE_URL
 
     if(userLogin === false){
-            return(
-                <div className='no-admin-container' >
-                    <img id='block-image' src={candado} alt="" />
-                    <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
-                    <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                    <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
-                </div>
-            )
+            return <NotLogin />
         }else if(userAdmin === false){
-            return(
-                <div className='no-admin-container' >
-                    <img id='block-image' src={candado} alt="" />
-                    <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                    <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
-                </div>
-            )
+            return <NotAdmin />
         }else if(!product){
             return(
             <div className="no-products">
@@ -55,12 +48,12 @@ function Edits({setPage}){
             validationSchema={objectValidation}
             onSubmit={async (values)=>{
                     const send_values ={
-                        "id": product.id,
+                        "id": idNumber,
                         ...values
                     }
-                    await fetchDataToken('put','http://localhost:5000/products',send_values,users.token);
+                    await fetchDataToken('put',`${API_URL}/products`,send_values,users.token);
                     await loadProducts();
-                    setPage('manager');
+                    navigate('/manager');
             }}
             >
             <Form id='edit-product-form'>
@@ -89,7 +82,8 @@ function Edits({setPage}){
                         <ErrorMessage name='stock' component="p" />
                         <div id='buttons-containers'>
                             <button id='submit-edit' type='submit'> 💾 Guardar cambios</button>
-                            <button id='cancel-submit' type='button' onClick={()=> setPage('manager')}>❌ Cancelar</button>
+                            <button id='cancel-submit' type='button' onClick={()=> navigate('/manager')} >❌ Cancelar</button>
+                            
                         </div>
                         
                     </Form>

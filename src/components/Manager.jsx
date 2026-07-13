@@ -2,9 +2,13 @@ import './styles/manager.css'
 import { useProduct } from '../contexts/ProductsContext';
 import { useUsers } from '../contexts/UsersContext';
 import { Formik,Form,Field, ErrorMessage } from 'formik';
-import useToken from '../hooks/useToken'
-import candado from '../assets/candado.png'
+import { Link, useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import NotLogin from './UserNotLogin';
+import NotAdmin from './NotAdmin';
+import useToken from '../hooks/useToken';
 import * as Yup from 'yup';
+
 
 const objectValidation = Yup.object({
     nombre: Yup.string().required('Por favor completa todos los campos antes de agregar el producto. '),
@@ -17,29 +21,24 @@ const objectValidation = Yup.object({
 
 
 
-function Manager({setPage}){
-    const {products, setProducts,setProductSelected, loadProducts} = useProduct()
-    const {fetchDataToken} = useToken(setProducts)
-    const {users,userAdmin,userLogin} = useUsers()
+function Manager(){
+    const {products, setProducts, loadProducts} = useProduct();
+    const {fetchDataToken} = useToken(setProducts);
+    const {users,userAdmin,userLogin} = useUsers();
+    const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_URL;
 
+    useEffect(()=>{
+        async function loadInfo() {
+            await loadProducts()
+        }
+        loadInfo()
+    },[loadProducts])
 
     if(userLogin === false){
-        return(
-            <div className='no-admin-container' >
-                <img id='block-image' src={candado} alt="" />
-                <h1 id='no-admin-title'>Debes Iniciar session para Continuar</h1>
-                <p id='no-login-message'> Necesitas iniciar sesion para confirmar que tienes los permisos para ingresar a esta seccion</p>
-                <button className='permssion-buttons' id='go-login' onClick={()=>setPage('login')} >Iniciar sesion</button>
-            </div>
-        )
+        return <NotLogin />
     }else if(userAdmin === false){
-        return(
-            <div className='no-admin-container' >
-                <img id='block-image' src={candado} alt="" />
-                <h1 id='no-admin-title'>No tienes permiso para acceder a esta sección.</h1>
-                <button className='permssion-buttons' id='home-return' onClick={()=>setPage('home')} >Volver al Inicio</button>
-            </div>
-        )
+        return <NotAdmin />
     }else{
         return(
         <>
@@ -69,9 +68,10 @@ function Manager({setPage}){
                                     <td>{product.stock}</td>
                                     <td>
                                         <div className='buttons-actions'>
-                                            <button id={product.id} onClick={()=> {setPage('edits'); setProductSelected(product.id)}} className='edit-button'>✎ Editar</button>
+                                            <button id={product.id} className='edit-button' onClick={()=>{navigate(`/manager/${product.id}`)}}>✎ Editar</button>
+                                            
                                             <button onClick={ async()=>{
-                                                await fetchDataToken('delete','http://localhost:5000/products',{"id":product.id},users.token);
+                                                await fetchDataToken('delete',`${API_URL}/products`,{"id":product.id},users.token);
                                                 await loadProducts();
                                             }} className='delete-button'> 🗑 Borrar</button>
                                         </div>
@@ -91,7 +91,7 @@ function Manager({setPage}){
                 validateOnChange={false}
                 validateOnBlur={false}
                 onSubmit={async (values, {resetForm})=> {
-                    await fetchDataToken('post','http://localhost:5000/products',values,users.token);
+                    await fetchDataToken('post',`${API_URL}/products`,values,users.token);
                     await loadProducts();
                     resetForm();
                 }

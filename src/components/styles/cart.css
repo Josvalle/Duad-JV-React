@@ -1,0 +1,127 @@
+#cart-body-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+#empty-cart-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.card-subtotal{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 90%;
+    max-width: 1100px;
+}
+#cart-card-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.item-card{
+    display: grid;
+    grid-template-columns: 90px 1fr 10em 10em 10em;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+}
+
+.cart-image{
+    height: 80px;
+    width: 80px;
+    border-radius: 4px;
+
+}
+
+.quantity-container{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-car-button{
+    background-color: transparent;
+    font-size: 1.50em;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+#less-button:active{
+    color: red;
+}
+
+#add-button:active{
+    color: blue;
+}
+.quantity-p{
+    border: 1px solid lightgray;
+    padding: 0.50em;
+    width: 2.50em;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.delete-card-button{
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+    border-color: transparent;
+    font-size: large;
+}
+
+.delete-card-button:active{
+    color: white;
+    background-color: red;
+    border-radius: 4px;
+}
+.subtotal-price{
+    font-weight: bold;
+}
+
+.subtotal-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5em;
+    font-weight: bolder;
+}
+
+#subtotal-containter{
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    width: 15em;
+    height: 7em;
+    padding: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.checkout-button{
+    text-align: center;
+    border-color: transparent;
+    background-color: #5862d6;
+    color: whitesmoke;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    height: 3em;
+    font-weight: bolder;
+}

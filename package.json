@@ -16,7 +16,10 @@
     "formik": "^2.4.9",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "yup": "^1.7.1"
+    "react-router": "^7.18.0",
+    "react-router-dom": "^7.18.0",
+    "yup": "^1.7.1",
+    "yup-phone-lite": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

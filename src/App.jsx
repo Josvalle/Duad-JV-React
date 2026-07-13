@@ -8,33 +8,44 @@ import Details from './components/Details';
 import Manager from './components/Manager'
 import Edits from './components/Edits';
 import Login from './components/Login'
+import ErrorPage from './components/ErrorPage';
+import Cart from './components/Cart';
+import Checkout from './components/Checkout';
 import { ProvideProduct } from './contexts/ProductsContext';
 import { ProvideUsers } from './contexts/UsersContext'
+import { ProvideCart } from './contexts/CartContext';
+import { Routes, Route} from 'react-router-dom'
 
 function App() {
-  const [page, setPage] = useState('home');
+  
   
 
   return (
     <div className="app">
+      <ProvideCart>
       <ProvideUsers>
-      <Header setPage={setPage} />
+      <Header  />
       <ProvideProduct>
         <main className="main-content">
-        {page === 'home' && <Home setPage={setPage} />}
-        {page === 'products' && (
-          <Products setPage={setPage}  />
-        )}
-        {page === 'details' && <Details setPage={setPage}  />}
-        {page === 'manager' && <Manager setPage={setPage} />}
-        {page === 'edits' && <Edits setPage={setPage} />}
-        {page === 'login' && <Login setPage={setPage}/>}
+        
+
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/products' element={<Products/>} />
+          <Route path='/products/:id' element={<Details/>}/>
+          <Route path='/manager' element={<Manager/>}/>
+          <Route path='/manager/:id' element={<Edits/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/cart' element={<Cart />}/>
+          <Route path='/checkout' element={<Checkout />}/>
+          <Route path='*' element={<ErrorPage/>}/>
+        </Routes>
 
       </main>
 
       </ProvideProduct>
       </ProvideUsers>
-      
+      </ProvideCart>
 
       <EndFot />
     </div>

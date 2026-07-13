@@ -36,6 +36,16 @@
   text-decoration: line-through;
 }
 
+.header-Nav{
+  margin: 0.5em;
+  cursor: pointer;
+  background-color: transparent;
+  border-color: transparent;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.25em;
+}
+
 .header h1 {
   color: #5862d6;
 }
@@ -44,7 +54,7 @@
   background-color: #5862d6;
   color: white;
   border-radius: 4px;
-  height: 2em;
+  
 
 }
 
@@ -53,4 +63,16 @@
   border-style: solid;
   border-color: lightgray;
   border-radius: 4px;
+}
+
+.cart-button{
+  display: flex;
+  align-items: center;
+  margin: 0.65em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cart-button:visited{
+  color: inherit;
 }

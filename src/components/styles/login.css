@@ -19,17 +19,23 @@
     margin-bottom: 0.75em;
     background-color: #5862d6;
     color: white;
+    height: 2.45em;
 }
 
 #cancel-login{
     margin-bottom: 1.50em;
+    text-decoration: none;
+    background-color: #5862d6;
+    color: white;
+    text-align: center;
+    height: 2em;
 }
 
 .login-buttons{
     border-color: transparent;
     border-radius: 4px;
     cursor: pointer;
-    height: 2.45em;
+    
     min-width: 27em;
 }
 

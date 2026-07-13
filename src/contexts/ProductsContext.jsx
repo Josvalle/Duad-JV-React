@@ -4,19 +4,17 @@ import useApi from '../hooks/useApi'
 const ProductContext = createContext({
     products: [],
     setProducts: ()=>{},
-    productSelected: null,
-    setProductSelected: () => {},
     loadProducts: ()=>{}
 
 })
 
 export function ProvideProduct({children}){
     const [products, setProducts] = useState([]);
-    const [productSelected, setProductSelected] = useState(null);
     const { loading, error, fetchData } = useApi(setProducts);
+    const API_URL = import.meta.env.VITE_URL;
 
     const loadProducts = React.useCallback(()=>{
-        fetchData('get','http://localhost:5000/products')
+        fetchData('get',`${API_URL}/products`)
     },[fetchData])
 
     useEffect(()=>{
@@ -29,13 +27,11 @@ export function ProvideProduct({children}){
     const conextValues = React.useMemo(()=>({
         products,
         setProducts,
-        productSelected,
-        setProductSelected,
         loading,
         error,
         loadProducts
     }),
-    [products, productSelected,loading,error,loadProducts]
+    [products,loading,error,loadProducts]
     );
 
     return (
